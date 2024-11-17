@@ -1,4 +1,4 @@
-## Extendme
+## Extensified
 
 Extension methods for Python.
 
@@ -7,7 +7,7 @@ Miss extension methods from other languages? Python can have those too.
 ## Installation
 
 ```shell
-pip install extendme==0.1.0
+pip install extensified==0.1.0
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-from extendme import extension_on
+from extensified import extension_on
 
 
 @dataclass

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "extendme"
+name = "extensified"
 description = "Extension methods for Python."
 version = "0.1.0"
 readme = "README.md"
@@ -21,9 +21,9 @@ authors = ["Vasiliy Spassky <spassky99@gmail.com>"]
 keywords = ["extensions", "extension classes", "extension methods"]
 
 [tool.poetry.urls]
-Homepage = "https://github.com/v-spassky/extendme"
-Issues = "https://github.com/v-spassky/extendme/issues"
-Repository = "https://github.com/v-spassky/extendme.git"
+Homepage = "https://github.com/v-spassky/extensified"
+Issues = "https://github.com/v-spassky/extensified/issues"
+Repository = "https://github.com/v-spassky/extensified.git"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -44,7 +44,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poe.tasks]
 lint = "ruff check ."
 typecheck = "mypy ."
-test = "pytest --cov=extendme --cov-report term-missing ."
+test = "pytest --cov=extensified --cov-report term-missing ."
 build = "python3 -m build"
 check-all = ["lint", "typecheck", "test"]
 show-coverage = "coverage html"

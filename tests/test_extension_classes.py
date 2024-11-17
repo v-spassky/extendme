@@ -2,7 +2,7 @@ from typing_extensions import Self
 
 import pytest
 
-from extendme import extension_on
+from extensified import extension_on
 
 
 @pytest.fixture

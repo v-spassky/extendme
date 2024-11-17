@@ -16,7 +16,7 @@ def extension_on(extension_target: type) -> Callable[[type], Any]:
         TypeError: If trying to extend a built-in type.
 
     Example:
-        >>> from extendme import extension_on
+        >>> from extensified import extension_on
         >>> class User:
         ...     def __init__(self, name: str):
         ...         self.name = name
