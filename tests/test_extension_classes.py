@@ -1,0 +1,96 @@
+from typing_extensions import Self
+
+import pytest
+
+from extendme import extension_on
+
+
+@pytest.fixture
+def user_class() -> type:
+    class User:
+        def __init__(self, name: str, age: int) -> None:
+            self.name = name
+            self.age = age
+
+    return User
+
+
+@pytest.fixture(params=[bool, int, float, str, bytes, list, tuple, set, dict])
+def builtin_class(request: pytest.FixtureRequest) -> type:
+    return request.param
+
+
+def test_extension_methods(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserMethodsExtension:
+        def make_older(self, years: int) -> None:
+            self.age += years  # type: ignore[attr-defined]
+
+    user = user_class("Vasi", 25)
+    user.make_older(years=1)
+
+    assert user.age == 26
+
+
+def test_extension_property_getter(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserPropertiesExtension:
+        @property
+        def display(self) -> str:
+            return f"{self.name}, {self.age}"  # type: ignore[attr-defined]
+
+        @property
+        def is_adult(self) -> str:
+            return self.age >= 18  # type: ignore[attr-defined]
+
+    user = user_class("Vasi", 25)
+
+    assert user.display == "Vasi, 25"
+    assert user.is_adult is True
+
+
+def test_extension_property_setter(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserPropertiesExtension:
+        @property
+        def years_until_graduation(self) -> int:
+            return max(0, 22 - self.age)
+
+        @years_until_graduation.setter
+        def years_until_graduation(self, years: int) -> None:
+            self.age = 22 - years
+
+    user = user_class("Vasi", 18)
+
+    assert user.age == 18
+    assert user.years_until_graduation == 4
+
+    user.years_until_graduation = 2
+
+    assert user.age == 20
+    assert user.years_until_graduation == 2
+
+
+@pytest.mark.skip("Extending a class with `@classmethod`s isn't implemented yet.")
+def test_extension_classmethods(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserClassmethodsExtension:
+        @classmethod
+        def create_adult(cls, name: str) -> Self:
+            # This would work: `return user_class(name, 18)`, but having `cls` bound to a wrong class is an issue.
+            return cls(name, 18)  # type: ignore[call-arg]
+
+    user = user_class.create_adult("Vasi")  # type: ignore[attr-defined]
+
+    assert isinstance(user, user_class)
+    assert user.name == "Vasi"  # type: ignore[attr-defined]
+    assert user.age == 18  # type: ignore[attr-defined]
+
+
+def test_expect_extending_builtins_to_fail(builtin_class: type) -> None:
+    with pytest.raises(TypeError):
+
+        @extension_on(builtin_class)
+        class _SomeExtension:
+            def dummy_method(self) -> str:
+                return "Cannot add methods on built-in types 🥺"

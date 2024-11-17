@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "extendme"
+description = "Extension methods for Python."
+version = "0.1.0"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+authors = ["Vasiliy Spassky <spassky99@gmail.com>"]
+keywords = ["extensions", "extension classes", "extension methods"]
+
+[tool.poetry.urls]
+Homepage = "https://github.com/v-spassky/extendme"
+Issues = "https://github.com/v-spassky/extendme/issues"
+Repository = "https://github.com/v-spassky/extendme.git"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.4"
+mypy = "^1.13.0"
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+build = "^1.2.2.post1"
+twine = "^5.1.1"
+poethepoet = "^0.30.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+lint = "ruff check ."
+typecheck = "mypy ."
+test = "pytest --cov=extendme --cov-report term-missing ."
+build = "python3 -m build"
+check-all = ["lint", "typecheck", "test"]
+show-coverage = "coverage html"
