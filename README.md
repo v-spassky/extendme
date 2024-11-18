@@ -15,7 +15,6 @@ pip install extensified==0.1.0
 ```python
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 from extensified import extension_on
 
