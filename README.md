@@ -1,7 +1,3 @@
-## Extensified
-
-Extension methods for Python.
-
 Miss extension methods from other languages? Python can have those too.
 
 ## Installation
