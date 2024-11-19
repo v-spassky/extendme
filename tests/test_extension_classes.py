@@ -71,13 +71,11 @@ def test_extension_property_setter(user_class: type) -> None:
     assert user.years_until_graduation == 2
 
 
-@pytest.mark.skip("Extending a class with `@classmethod`s isn't implemented yet.")
 def test_extension_classmethods(user_class: type) -> None:
     @extension_on(user_class)
     class _UserClassmethodsExtension:
         @classmethod
         def create_adult(cls, name: str) -> Self:
-            # This would work: `return user_class(name, 18)`, but having `cls` bound to a wrong class is an issue.
             return cls(name, 18)  # type: ignore[call-arg]
 
     user = user_class.create_adult("Vasi")  # type: ignore[attr-defined]

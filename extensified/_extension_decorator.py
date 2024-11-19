@@ -37,7 +37,7 @@ def extension_on(extension_target: type) -> Callable[[type], Any]:
         'JOHN'
 
     Notes:
-        - `@classmethod` and `super()` can't be used in an extension class for now.
+        - `super()` can't be used in an extension class for now.
         - The `self` parameter in extension methods refers to instances of the target class.
         - Multiple extensions can be applied to the same target class.
         - Extension methods have access to the target instance's attributes.
@@ -46,7 +46,11 @@ def extension_on(extension_target: type) -> Callable[[type], Any]:
     def decorator(extension_class: type):
         for method_name in _non_inherited_methods_names(extension_class):
             method = getattr(extension_class, method_name)
-            setattr(extension_target, method_name, method)
+            if _is_classmethod(method):
+                bound_method: classmethod[Any, Any, Any] = classmethod(method.__func__)
+                setattr(extension_target, method_name, bound_method)
+            else:
+                setattr(extension_target, method_name, method)
 
     return decorator
 
@@ -68,3 +72,7 @@ def _non_inherited_methods_names(cls: type) -> set[str]:
 
 def _is_descriptor(obj: Any) -> bool:
     return any(hasattr(obj, attr) for attr in {"__get__", "__set__", "__delete__"})
+
+
+def _is_classmethod(obj: Any) -> bool:
+    return hasattr(obj, "__self__") and isinstance(obj.__self__, type)
