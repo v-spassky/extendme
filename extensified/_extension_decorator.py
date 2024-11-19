@@ -1,16 +1,19 @@
-from typing import Any, Callable
+from typing import Any, Callable, TypeVar
 
 
-def extension_on(extension_target: type) -> Callable[[type], None]:
+_ExtTargetClass = TypeVar("_ExtTargetClass", bound=type)
+
+
+def extension_on(extension_target: _ExtTargetClass) -> Callable[[_ExtTargetClass], None]:
     """
     Constructs a decorator function, which, when applied to a class, adds its methods to `extension_target`.
 
     Args:
-        extension_target[type]: The class to extend with methods defined in the decorated class (extension class). Must
-        be a user-defined class (built-in types are not supported).
+        extension_target[_ExtTargetClass]: The class to extend with methods defined in the decorated class (extension
+        class). Must be a user-defined class (built-in types are not supported).
 
     Returns:
-        Callable[[type], None]: A decorator function that processes the extension class.
+        Callable[[_ExtTargetClass], None]: A decorator function that processes the extension class.
 
     Raises:
         TypeError: If trying to extend a built-in type.
@@ -43,11 +46,11 @@ def extension_on(extension_target: type) -> Callable[[type], None]:
         - Extension methods have access to the target instance's attributes.
     """
 
-    def decorator(extension_class: type):
+    def decorator(extension_class: _ExtTargetClass):
         for method_name in _non_inherited_methods_names(extension_class):
             method = getattr(extension_class, method_name)
             if _is_classmethod(method):
-                bound_method: classmethod[Any, Any, Any] = classmethod(method.__func__)
+                bound_method: classmethod[_ExtTargetClass, Any, Any] = classmethod(method.__func__)
                 setattr(extension_target, method_name, bound_method)
             else:
                 setattr(extension_target, method_name, method)
