@@ -46,7 +46,7 @@ def extension_on(extension_target: _ExtTargetClass) -> Callable[[_ExtTargetClass
         - Extension methods have access to the target instance's attributes.
     """
 
-    def decorator(extension_class: _ExtTargetClass):
+    def decorator(extension_class: _ExtTargetClass) -> None:
         for method_name in _non_inherited_methods_names(extension_class):
             method = getattr(extension_class, method_name)
             if _is_classmethod(method):
