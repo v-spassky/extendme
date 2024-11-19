@@ -3,7 +3,7 @@ Miss extension methods from other languages? Python can have those too.
 ## Installation
 
 ```shell
-pip install extensified==0.1.0
+pip install extensified==0.2.0
 ```
 
 ## Usage

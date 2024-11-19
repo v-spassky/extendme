@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "extensified"
 description = "Extension methods for Python."
-version = "0.1.0"
+version = "0.2.0"
 readme = "README.md"
 classifiers = [
     "License :: OSI Approved :: MIT License",
