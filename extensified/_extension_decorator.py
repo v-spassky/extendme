@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
 
-def extension_on(extension_target: type) -> Callable[[type], Any]:
+def extension_on(extension_target: type) -> Callable[[type], None]:
     """
     Constructs a decorator function, which, when applied to a class, adds its methods to `extension_target`.
 
@@ -10,7 +10,7 @@ def extension_on(extension_target: type) -> Callable[[type], Any]:
         be a user-defined class (built-in types are not supported).
 
     Returns:
-        Callable[[type], Any]: A decorator function that processes the extension class.
+        Callable[[type], None]: A decorator function that processes the extension class.
 
     Raises:
         TypeError: If trying to extend a built-in type.
