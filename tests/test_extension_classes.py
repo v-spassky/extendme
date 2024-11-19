@@ -85,6 +85,21 @@ def test_extension_classmethods(user_class: type) -> None:
     assert user.age == 18  # type: ignore[attr-defined]
 
 
+@pytest.mark.skip("Extending a class with `@staticmethod`s isn't implemented yet.")
+def test_extension_static_methods(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserUtilsExtension:
+        @staticmethod
+        def validate_age(age: int) -> bool:
+            return 0 <= age <= 120
+
+    user = user_class("Vasi", 18)
+
+    assert user.validate_age(25) is True
+    assert user.validate_age(-5) is False
+    assert user.validate_age(150) is False
+
+
 def test_expect_extending_builtins_to_fail(builtin_class: type) -> None:
     with pytest.raises(TypeError):
 

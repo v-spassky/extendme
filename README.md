@@ -51,5 +51,5 @@ print(customer.vcard_name)
 ## Limitations
 
 - Make sure that extension class is imported before its methods are used (i.e. import it in your init code).
-- `super()` can't be used in an extension class for now.
+- `@staticmethod` and `super()` can't be used in an extension class for now.
 - Type checkers won't understand what's going on and will complain about attributes missing.
