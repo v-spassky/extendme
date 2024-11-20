@@ -71,7 +71,7 @@ def test_extension_property_setter(user_class: type) -> None:
     assert user.years_until_graduation == 2
 
 
-def test_extension_classmethods(user_class: type) -> None:
+def test_extension_class_methods(user_class: type) -> None:
     @extension_on(user_class)
     class _UserClassmethodsExtension:
         @classmethod
@@ -87,7 +87,7 @@ def test_extension_classmethods(user_class: type) -> None:
 
 def test_extension_static_methods(user_class: type) -> None:
     @extension_on(user_class)
-    class _UserUtilsExtension:
+    class _UserStaticmethodsExtension:
         @staticmethod
         def validate_age(age: int) -> bool:
             return 0 <= age <= 120
