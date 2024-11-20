@@ -41,6 +41,9 @@ poethepoet = "^0.30.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.ruff]
+line-length = 100
+
 [tool.poe.tasks]
 lint = "ruff check ."
 typecheck = "mypy ."
