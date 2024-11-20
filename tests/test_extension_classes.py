@@ -12,6 +12,9 @@ def user_class() -> type:
             self.name = name
             self.age = age
 
+        def years_until_death(self) -> int:
+            return 100 - self.age
+
     return User
 
 
@@ -97,6 +100,17 @@ def test_extension_static_methods(user_class: type) -> None:
     assert user.validate_age(25) is True
     assert user.validate_age(-5) is False
     assert user.validate_age(150) is False
+
+
+def test_extension_method_overriding_original(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserStaticmethodsExtension:
+        def years_until_death(self) -> int:
+            return 200 - self.age  # type: ignore[attr-defined]
+
+    user = user_class("Vasi", 18)
+
+    assert user.years_until_death() == 200 - user.age
 
 
 def test_expect_extending_builtins_to_fail(builtin_class: type) -> None:
