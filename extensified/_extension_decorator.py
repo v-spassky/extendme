@@ -2,19 +2,19 @@ import inspect
 from typing import Any, Callable, TypeVar
 
 
-_ExtTargetClass = TypeVar("_ExtTargetClass", bound=type)
+_ExtendedClass = TypeVar("_ExtendedClass", bound=type)
 
 
-def extension_on(extension_target: _ExtTargetClass) -> Callable[[_ExtTargetClass], None]:
+def extension_on(extension_target: _ExtendedClass) -> Callable[[_ExtendedClass], None]:
     """
     Constructs a decorator function, which, when applied to a class, adds its methods to `extension_target`.
 
     Args:
-        extension_target[_ExtTargetClass]: The class to extend with methods defined in the decorated class (extension
+        extension_target[_ExtendedClass]: The class to extend with methods defined in the decorated class (extension
         class). Must be a user-defined class (built-in types are not supported).
 
     Returns:
-        Callable[[_ExtTargetClass], None]: A decorator function that processes the extension class.
+        Callable[[_ExtendedClass], None]: A decorator function that processes the extension class.
 
     Raises:
         TypeError: If trying to extend a built-in type.
@@ -47,11 +47,11 @@ def extension_on(extension_target: _ExtTargetClass) -> Callable[[_ExtTargetClass
         - Extension methods have access to the target instance's attributes.
     """
 
-    def decorator(extension_class: _ExtTargetClass) -> None:
+    def decorator(extension_class: _ExtendedClass) -> None:
         for method_name in _non_inherited_methods_names(extension_class):
             method = getattr(extension_class, method_name)
             if _is_classmethod(method):
-                bound_method: classmethod[_ExtTargetClass, Any, Any] = classmethod(method.__func__)
+                bound_method: classmethod[_ExtendedClass, Any, Any] = classmethod(method.__func__)
                 setattr(extension_target, method_name, bound_method)
                 return
             if _is_staticmethod(extension_class, method_name):
@@ -85,5 +85,5 @@ def _is_classmethod(obj: Any) -> bool:
     return hasattr(obj, "__self__") and isinstance(obj.__self__, type)
 
 
-def _is_staticmethod(cls: _ExtTargetClass, method_name: str) -> bool:
+def _is_staticmethod(cls: _ExtendedClass, method_name: str) -> bool:
     return isinstance(inspect.getattr_static(cls, method_name), staticmethod)
