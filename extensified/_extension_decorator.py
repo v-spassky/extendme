@@ -3,6 +3,7 @@ from typing import Any, Callable, TypeVar
 
 
 _ExtendedClass = TypeVar("_ExtendedClass", bound=type)
+"""Type of the class that is being extended (the one that is passed to `extension_on` as an argument)."""
 
 
 def extension_on(extension_target: _ExtendedClass) -> Callable[[_ExtendedClass], None]:
