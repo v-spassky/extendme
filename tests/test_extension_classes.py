@@ -113,6 +113,19 @@ def test_extension_method_overriding_original(user_class: type) -> None:
     assert user.years_until_death() == 200 - user.age
 
 
+@pytest.mark.skip("Using `super()` in extension classes isn't implemented yet.")
+def test_extension_method_using_super(user_class: type) -> None:
+    @extension_on(user_class)
+    class _UserStaticmethodsExtension:
+        def years_until_death(self) -> int:
+            original_estimate = super().years_until_death()  # type: ignore[misc]
+            return original_estimate + 10
+
+    user = user_class("Vasi", 18)
+
+    assert user.years_until_death() == 100 - user.age + 10
+
+
 def test_expect_extending_builtins_to_fail(builtin_class: type) -> None:
     with pytest.raises(TypeError):
 
