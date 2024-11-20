@@ -42,7 +42,7 @@ def extension_on(extension_target: _ExtendedClass) -> Callable[[_ExtendedClass],
         'JOHN'
 
     Notes:
-        - `@staticmethod` and `super()` can't be used in an extension class for now.
+        - `super()` can't be used in an extension class for now.
         - The `self` parameter in extension methods refers to instances of the target class.
         - Multiple extensions can be applied to the same target class.
         - Extension methods have access to the target instance's attributes.
