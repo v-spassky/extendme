@@ -1,3 +1,4 @@
+import inspect
 from typing import Any, Callable, TypeVar
 
 
@@ -52,8 +53,11 @@ def extension_on(extension_target: _ExtTargetClass) -> Callable[[_ExtTargetClass
             if _is_classmethod(method):
                 bound_method: classmethod[_ExtTargetClass, Any, Any] = classmethod(method.__func__)
                 setattr(extension_target, method_name, bound_method)
-            else:
-                setattr(extension_target, method_name, method)
+                return
+            if _is_staticmethod(extension_class, method_name):
+                setattr(extension_target, method_name, staticmethod(method))
+                return
+            setattr(extension_target, method_name, method)
 
     return decorator
 
@@ -79,3 +83,7 @@ def _is_descriptor(obj: Any) -> bool:
 
 def _is_classmethod(obj: Any) -> bool:
     return hasattr(obj, "__self__") and isinstance(obj.__self__, type)
+
+
+def _is_staticmethod(cls: _ExtTargetClass, method_name: str) -> bool:
+    return isinstance(inspect.getattr_static(cls, method_name), staticmethod)

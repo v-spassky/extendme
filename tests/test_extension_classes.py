@@ -85,7 +85,6 @@ def test_extension_classmethods(user_class: type) -> None:
     assert user.age == 18  # type: ignore[attr-defined]
 
 
-@pytest.mark.skip("Extending a class with `@staticmethod`s isn't implemented yet.")
 def test_extension_static_methods(user_class: type) -> None:
     @extension_on(user_class)
     class _UserUtilsExtension:
